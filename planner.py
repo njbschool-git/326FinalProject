@@ -6,6 +6,27 @@ import os
 
 EXPENSE_FILE = "expenses.csv"
 
+class Transaction:
+    """
+    Class for a single financial transaction.
+    
+    Attributes:
+        date (str): The date and time of the transaction.
+        amount (float): The amount spent.
+        category (str): The category of the expense.
+        description (str): A brief description of the expense.
+    """
+    def __init__(self, date, amount, category, description):
+        self.date = date
+        self.amount = float(amount)
+        self.category = category
+        self.description = description
+
+    def __str__(self):
+        return f"{self.date} | ${self.amount:.2f} | {self.category} | {self.description}"
+
+
+
 def add_expense(amount, category, description):
     """
     Adds an expense entry to the CSV file.
@@ -30,17 +51,30 @@ def add_expense(amount, category, description):
 
     print(f"Expense added: ${amount} - {category} - {description}")
 
-#Can be anything you want - just made it up  (The data is from the file for your reports!) 
+
+
 def report1(data):
-    print("Report 1: Summary by Category (placeholder)")
+    print("Report 1: Summary by Category")
+    summary = {}
+    for txn in data:
+        summary[txn.category] = summary.get(txn.category, 0) + txn.amount
+    for cat, total in summary.items():
+        print(f"{cat}: ${total:.2f}")
 
-#Can be anything you want - just made it up
 def report2(data):
-    print("Report 2: Total Expenses Over Time (placeholder)")
+    print("Report 2: Monthly Expenses")
+    summary = {}
+    for txn in data:
+        month = txn.date[:7]
+        summary[month] = summary.get(month, 0) + txn.amount
+    for month, total in sorted(summary.items()):
+        print(f"{month}: ${total:.2f}")
 
-#Can be anything you want - just made it up
 def report3(data):
-    print("Report 3: Highest Single Expenses (placeholder)")    
+    print("Report 3: Largest Expenses")
+    top_expenses = sorted(data, key=lambda x: x.amount, reverse=True)[:5]
+    for txn in top_expenses:
+        print(txn)
     
 
 
@@ -62,6 +96,8 @@ def parse_args(args_list):
 
     return parser.parse_args()
 
+
+
 def read_expense_data():
     """
     Reads the expense data from the CSV file.
@@ -74,9 +110,10 @@ def read_expense_data():
 
     with open(EXPENSE_FILE, mode='r', encoding='utf-8') as file:
         reader = csv.DictReader(file)
-        return list(reader)
-    
-    
+        return [Transaction(row["Date"], row["Amount"], row["Category"], row["Description"]) for row in reader]
+
+
+
 def main():
     """
     Entry point for the script.
