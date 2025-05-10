@@ -20,7 +20,8 @@ class TestExpenseTracker(unittest.TestCase):
         
         with open(self.test_file, 'w', newline='', encoding='utf-8') as f:
             writer = csv.writer(f)
-            writer.writerow(["Date", "Amount", "Category", "Description"])
+
+            #writer.writerow(["Date", "Amount", "Category", "Description"])
             writer.writerow(["2025-04-01 12:00:00", "10.50", "food", "Lunch"])
             writer.writerow(["2025-04-02 13:00:00", "200.00", "rent", "April rent"])
             writer.writerow(["2025-04-03 14:00:00", "50.00", "utilities", "Electric bill"])

@@ -109,7 +109,7 @@ def read_expense_data():
         return []
 
     with open(EXPENSE_FILE, mode='r', encoding='utf-8') as file:
-        reader = csv.DictReader(file)
+        reader = csv.DictReader(file, fieldnames=["Date", "Amount", "Category", "Description"])
         return [Transaction(row["Date"], row["Amount"], row["Category"], row["Description"]) for row in reader]
 
 
